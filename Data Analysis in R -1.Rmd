@@ -1,0 +1,463 @@
+---
+output: html_document
+---
+---
+TITLE
+---
+
+<p><BR>
+<CENTER>
+<FONT SIZE = 4, COLOR="#8272E9">
+<br>Avash Chand
+<br><b>Northeastern University</b>
+</FONT>
+</CENTER>
+
+
+---
+Libraries
+---
+
+```{r message=FALSE, warning=FALSE}
+#Libraries
+library(readxl)
+library(dplyr)
+library(knitr)
+library(RColorBrewer)
+
+#Data sets
+f <- file.choose("Project6Data.csv")
+sales2020 <- read.csv(f)
+```
+
+<P>
+<FONT SIZE=4, COLOR="#8272E9"><B>INTRODUCTION</B></FONT>
+</P>
+<p>Big data  is used in every sector nowadays. Data analytics helps organization to identify the problems, which organization is facing and to boost sales.Also, big data help building a better customer experience due to which sales will boost and pricing can be changed constantly with the help of real time analytics to keep up with competition.(Apparatus, n.d.) In this project the data set is of e-commerce company which has information about order ID, Customer name, city, state, market region along with the total sales,profit,loss, shipping cost of the company.(Sunagar, 2020)
+</p>
+<p>This data set is a mixture of quantitative and qualitative data. This data set contains city, state, market, region, segment, department as qualitative data and profit, shipping cost, total sales, loss as quantitative data.(Zach,2020)
+</p>
+<p>As by using critical and logical thinking, I found out that people are returning items and if they continue to return more items company will suffer huge loss.Now, the question is "What can be done to minimize the return of the product".To answer that question I would focus on the market size, total sales and returns of the product.
+</p>
+<p>To address the problem, I plan to use R programming language and use descriptive and prescriptive analysis.Descriptive analysis gives us basic description about data like mean median mode. Whereas, prescriptive analysis combines  all our data and analytics, then outputs a model prescription.
+(Roldos,2021)
+<p>
+
+<br><P>
+<FONT SIZE=4, COLOR="#8272E9"><B>Analysis Section</B></FONT>
+</P>
+---
+Task 1 Descriptive Statistics
+---
+```{r}
+# Codes to calculate Mean
+mean_price <- mean(sales2020$Price)
+mean_quantity <- mean(sales2020$Quantity)
+mean_shipping <- mean(sales2020$ShippingCost_Product)
+mean_sales <- mean(sales2020$Sales_Total)
+mean_loss <- mean(sales2020$Total_loss)
+
+# Codes to calculate Standard Deviation
+sd_price <- sd(sales2020$Price)
+sd_quantity <- sd(sales2020$Quantity)
+sd_shipping <- sd(sales2020$ShippingCost_Product)
+sd_sales <- sd(sales2020$Sales_Total)
+sd_loss <- sd(sales2020$Total_loss)
+
+# Codes to calculate Maximun Value
+max_price <- max(sales2020$Price)
+max_quantity <- max(sales2020$Quantity)
+max_shipping <- max(sales2020$ShippingCost_Product)
+max_sales <- max(sales2020$Sales_Total)
+max_loss <- max(sales2020$Total_loss)
+
+# Codes to calculate Minimum value
+min_price <- min(sales2020$Price)
+min_quantity <- min(sales2020$Quantity)
+min_shipping <- min(sales2020$ShippingCost_Product)
+min_sales <- min(sales2020$Sales_Total)
+min_loss <- min(sales2020$Total_loss)
+
+# Codes to calcualte Median 
+median_price <- median(sales2020$Price)
+median_quantity <- median(sales2020$Quantity)
+median_shipping <- median(sales2020$ShippingCost_Product)
+median_sales <- median(sales2020$Sales_Total)
+median_loss <- median(sales2020$Total_loss)
+
+# Codes to convert into matrix
+price_matrix <- matrix(c(mean_price, sd_price, max_price, min_price, median_price), ncol=1,nrow = 5, byrow = TRUE)
+
+quantity_matrix <- matrix(c(mean_quantity, sd_quantity, max_quantity, min_quantity, median_quantity), ncol = 1, nrow=5, byrow = TRUE)
+
+shipping_matrix <- matrix(c(mean_shipping, sd_shipping, max_shipping, min_shipping, median_shipping), ncol = 1, nrow=5, byrow = TRUE)
+
+sales_matrix <- matrix(c(mean_sales, sd_sales, max_sales, min_sales, median_sales), ncol = 1,nrow = 5, byrow = TRUE)
+
+loss_matrix <- matrix(c(mean_loss, sd_loss, max_loss, min_loss, median_loss), ncol=1, nrow = 5, byrow = TRUE)
+
+# Codes to combine all columns into single matrix 
+final_matrix <- cbind(round(price_matrix,2), round(quantity_matrix,2),round(shipping_matrix,2),round(sales_matrix,2),round(loss_matrix,2))
+
+# Codes to put column names and row names.
+colnames(final_matrix) <- c("Price","Quantity", "Shipping Cost", "Sales_Total", "Total_loss")
+row.names(final_matrix) <- c("Mean", "SD", "Max", "Min", "Median")
+
+# Codes to make table
+knitr::kable(final_matrix)
+
+```
+
+---
+Task 2.1
+---
+```{r}
+par(mai=c(1.6,1,0.4,1))
+
+# Codes to create box plot
+
+boxplot(sales2020$Price,
+        main="Price of the products",
+        col= "#F8B195",
+        pch=23,
+        xlab = "",
+        ylab = "Price",
+        ylim=c(100,4000),
+        las=2,
+        cex.lab=1.2)
+# Codes to create histogram
+hist(sales2020$Price,
+     xlim = c(0,4000),
+     ylim = c(0,400),
+     breaks = 20,
+     main = "Price of Products",
+     xlab= "Price",
+     labels= TRUE,
+     col= brewer.pal(n=3, "Dark2"),
+     cex=0.5
+)
+```
+
+<br><p>Observation</p>
+<p>From the above box plot and histogram I found out that the box plot and histogram is right skewed. It means that the mean is greater than median and maximum number of price of products falls in between 200-300</p>
+---
+Task 2.2
+---
+```{r}
+# Codes to create box plot
+
+boxplot(sales2020$Quantity,
+        col="cornflowerblue",
+        ylim=c(0,20),
+        main = "Quantity of the products",
+        ylab= "Quantities")
+
+# Codes to create histogram
+hist(sales2020$Quantity,
+      breaks = 18,
+      main = "Quantities of the product",
+      xlab = "Quantities",
+      xlim = c(0,20),
+      ylim = c(0,250),
+      col = brewer.pal(n=11, "Spectral"),
+      labels = TRUE
+      )
+```
+<br><p>Observation</p>
+<p>From the above box plot and histogram I found out that the box plot and histogram is right skewed. It means that the mean is greater than median and the maximum number of quantities of product ordered is in between 3 to 6 </p>
+
+---
+Task 2.3
+---
+
+```{r}
+# Codes to create box plot
+
+boxplot(sales2020$ShippingCost_Product,
+        col="#C06C84",
+        ylim=c(0,100),
+        main = "Shipping cost of the products",
+        ylab= "Price")
+
+# Codes to create histogram
+
+ hist(sales2020$ShippingCost_Product,
+      breaks = 25,
+      main = "Histogram of shipping cost",
+      xlab ="Shipping cost of the product",
+      xlim = c(0,100),
+      ylim = c(0,600),
+      col = brewer.pal(n=11, "PiYG"),
+      labels = TRUE
+      )
+```
+<br><p>Observation</p>
+<p>From the above box plot and histogram I found out that the box plot and histogram is left skewed. It means that the median is greater than mean and the maximum number of price of shipping cost is around 40 to 42. </p>
+---
+Task 2.4
+---
+```{r}
+# Codes to create box plot
+
+boxplot(sales2020$Sales_Total,
+        col="#6C5B7B",
+        ylim=c(0,20000),
+        main = "Total sales of the products",
+        ylab= "Price")
+
+# Codes to create histogram
+ hist(sales2020$Sales_Total,
+      breaks = 30,
+      main = "Histogram of total sales",
+      xlab ="Total sale of the product",
+      xlim = c(0,20000),
+      ylim = c(0,500),
+      col = brewer.pal(n=11, "Paired"),
+      labels = TRUE
+      )
+```
+<br><p>Observation</p>
+<p>From the above box plot and histogram I found out that the box plot and histogram is right skewed. It means that the mean is greater than median and the maximum number of total sales price is around 1500-2500. </p>
+---
+Task 3
+---
+```{r}
+
+# Codes to calculate frequency
+table_market <- table(sales2020$Market)
+table_segment <- table(sales2020$Segment)
+table_Department <- table(sales2020$Department)
+table_order <- table(sales2020$OrderPriority)
+
+```
+
+---
+Task 3.1
+---
+```{r}
+
+# Codes to create bar graph
+
+barplot(table_market,
+        main = "Bar graph of market",
+        xlab = "Markets",
+        ylab = "Frequency",
+        ylim = c(0,350),
+        col = brewer.pal(n=5, "RdBu"),
+        )
+
+# Codes to add labels to bar graph
+
+text(0.7,71,labels="62", cex=0.8)
+text(1.9,311,labels="302", cex=0.8)
+text(3.1,275,labels="261", cex=0.8)
+text(4.3,216,labels="205", cex=0.8)
+text(5.5,180,labels="170", cex=0.8)
+```
+<br><p>Observation</p>
+<p>From the above bar graph, I found that there are 5 markets area. Asia pacific market has highest number of customers and Africa market has least number of customers among 5 markets.</p>
+
+---
+Task 3.2
+---
+```{r}
+# Codes to create bar graph
+
+barplot(table_segment,
+        main = "Bar graph of segment",
+        xlab = "Segments",
+        ylab = "Frequency",
+        ylim = c(0,1000),
+        col = brewer.pal(n=3, "Set3")
+)
+# Codes to add labels to bar graph
+text(0.7,585,labels="553", cex=0.8)
+text(1.9,316,labels="292", cex=0.8)
+text(3.1,182,labels="155", cex=0.8)
+
+```
+<br><p>Observation</p>
+<p>From the above bar graph, I found that there are 3 segments of the market. People buy consumer segment items the most and home office segment the least.</p>
+---
+Task 3.3
+---
+```{r}
+
+# Codes to create pie chart
+labels_dept <- c("Furniture", "Office supplies", "Technology")
+percent_dep <- (table_Department/sum(table_Department)*100)
+pie(table_Department,
+    labels = paste(percent_dep, "%"), 
+    col = rainbow(length(labels_dept)),
+    main = "Pie chart of department")
+legend("topright", c("Furniture", "Office supplies", "Technology"), cex = 0.8,
+   fill = rainbow(length(labels_dept)))
+
+
+```
+<br><p>Observation</p>
+<p>From the above Pie chart, I found that there are 3 departments. People buy technology department items the most, after that office supplies items and furniture items at last among the three departments.</p>
+---
+Task 3.4
+---
+```{r}
+# Codes to create pie chart
+labels_dept <- c("Critical", "High", "Low", " Medium")
+percent_dep <-(table_order/sum(table_order)*100)
+pie(table_order,labels = paste(percent_dep, "%"),
+    border = "white",
+    col = brewer.pal(5, "Set2"),
+    main = "Pie chart of order priority")
+legend("topright", c("Critical", "High", "Low", " Medium"), 
+       cex = 0.8,
+   fill = brewer.pal(5, "Set2"))
+```
+<br><p>Observation</p>
+<p>From the above Pie chart, I found that there are 4 order priority. Medium order priority are highest and critical order priority is the least.</p>
+---
+Task 4.1
+---
+<font size=3><b><p> What is the total loss due to returning items per department?</p></b></font>
+<p> This question asked to calculate the total loss of all categories of department, from which we can know how much loss we are bearing in different categories due to returning of items by customer.<p>
+
+```{r}
+# Codes to make bar graph
+
+loss_per_dept <- tapply(sales2020$Total_loss, INDEX = sales2020$Department, sum)
+barplot(loss_per_dept,
+        xlab = "Departments",
+        main= "Total loss due to returning items per department",
+        ylab = "Price",
+        ylim = c(0,350000),
+        col = brewer.pal(n=3, "Pastel2"))
+text(0.7,282000,labels="268770.4", cex=0.8)
+text(1.9,270000,labels="258991.1", cex=0.8)
+text(3.1,306101,labels="296101", cex=0.8)
+```
+
+<p>Observation</p>
+<p>According to the figure above I found out that Technology department suffered highest loss due to returning of product than other two sectors. </p>
+
+---
+Task 4.2
+---
+<font size=3><b><p> What are the mean sales per segment?</p></b></font>
+<p>This question is asked to find out mean of total sales of all segment, from which we can know the average value of sales per segment</p>
+```{r}
+# Codes to make dot chart
+
+mean_per_seg <- tapply(sales2020$Sales_Total, INDEX = sales2020$Segment, mean)
+data_mean_seg <- as.numeric(mean_per_seg)
+dotchart(data_mean_seg,
+         color = brewer.pal(n = 3, name = "Dark2"),
+         xlab = "Price",
+         ylab = "Segment",
+         main= "Dot chart of average sales per segment",
+         labels = c("Consumer","Corporate","Home Office")
+         )
+text(3043,1.2,labels="3039.39", cex=0.8)
+text(3160,2.2,labels="3158.34", cex=0.8)
+text(3250,3.2,labels="3254.12", cex=0.8)
+
+```
+<br><p>Observation</p>
+<p> From the figure above I found out that home office segment highest average sales, corporate has second highest average sales then consumer has least average sales compared to three segment.
+
+---
+Task 4.3
+---
+<font size=3><b><p> Which type of shipping mode is preferred by the customers?</p></b></font>
+<br><p>This question is asked to find out how much rush delivery service option customers choose.
+```{r}
+# Codes to create pie chart
+
+table_ship <- table(sales2020$ShipMode)
+percent_ship <-(table_ship/sum(table_ship)*100)
+pie(table_ship,
+    labels = paste(percent_ship, "%"), 
+    col = brewer.pal(4,"GnBu"),
+    main = "Pie chart of delivery mode")
+legend("topright", c("First Class", "Same Day", "Second Class", " Standard Class"), cex = 0.8,
+   fill = brewer.pal(4,"GnBu"))
+```
+<br><p>Observation</p>
+<p> From the pie chart above I found out that maximum number of customer prefers standard class shipping mode and least number of customer prefers same day shipping mode.</p>
+---
+Task 5
+---
+```{r}
+# Codes to filter data
+
+filter_data <- dplyr::filter(sales2020, Region=="Central America")
+```
+<font size=3><b><p> What is the average shipping cost per Segment?</p></b></font>
+```{r}
+# Codes to make bar plot
+average_america <- tapply(filter_data$ShippingCost_Product, INDEX = filter_data$Segment, mean)
+average_matrix_mean <- matrix(average_america, ncol = 1,nrow = 3, byrow = TRUE)
+matrix_name <- matrix(c("Consumer","Corporate","Home Office"),ncol = 1,nrow = 3, byrow = TRUE)
+final_table_average <- cbind(matrix_name, round(average_matrix_mean, 2))
+colnames(final_table_average) <- c("Segment","Average")
+knitr::kable(final_table_average)
+
+# Codes to create bar plot
+barplot(average_america,
+        main = "Average shipping cost per segment",
+        col = brewer.pal(3,"BuGn"),
+        ylim = c(0,50),
+        xlab = "Segment",
+        ylab = "Average")
+text(0.7,44,labels="41.46", cex=0.8)
+text(1.9,43,labels="40.54", cex=0.8)
+text(3.1,43,labels="41.2", cex=0.8)
+```
+---
+Task 6
+---
+
+<font size=3><b><p> From which market area people bought technology item the most?</p></b></font>
+<p> As we know from figure 3.3 technology department is the most sold items. So, lets dive deeper into technology items.
+```{r}
+filter_final <- dplyr::filter(sales2020, Department=="Technology")
+final_table_market <- table(filter_final$Market)
+barplot(final_table_market,
+        ylim = c(0,150),
+        col = brewer.pal(n=5,"Pastel1"),
+        main = "Number of people who bought technology item per market",
+        xlab = "Market",
+        ylab = "Number of People")
+text(0.7,30,labels="26", cex=0.8)
+text(1.9,127,labels="123", cex=0.8)
+text(3.1,97,labels="92", cex=0.8)
+text(4.4,86,labels="82", cex=0.8)
+text(5.5,36,labels="32", cex=0.8)
+```
+<br><p>Observation</p>
+<p> From the above diagram, I found out that there are 355 total people who bought technology items and if we, filter them by market area we can find that from Asia Pacific market, technology items is sold most and in Africa market, technology items is sold less.</p>
+
+<P>
+<FONT SIZE=4, COLOR="#8272E9"><B>COLCLUSION</B></FONT>
+</P>
+<p>After analyzing the data set of the e-commerce organization, found out the sales in Africa is very less compared to others.I would suggest this company to increase there production on this market area. Asia Pacific market region has the highest number of customers and many people are buying technological items
+and most of the people prefer standard shipping option.
+From this project, I learned how to compare two categorical variable with numerical value and how to label bar graphs by using text() function, I learned how to create pie chart and make legend for pie-chart. Also, I learned to generate some questions about problems and what can be done to solve regarding the data set. 
+<P>
+<FONT SIZE=4, COLOR="#8272E9"><B>REFERENCE</B></FONT>
+</P>
+<p>
+Sunagar,Pramod.(2020).Influence of big data in smart tourism.
+<br>https://www.sciencedirect.com/topics/computer-science/big-data-application</p>
+
+<p>Zach.(2020 Sept 18).Qualitative vs. Quantitative Variables: What’s the Difference?
+<br>https://www.statology.org/qualitative-vs-quantitative-variables/</p>
+
+<p>Roldos,Ines.(2021 January 9). What is Data Analysis? Examples & Why It Matters?
+<br>https://monkeylearn.com/blog/data-analysis-examples/ </p> 
+
+<p>Appratus.(n.d.). The application of Big Data for ecommerce
+<br>https://www.apparatus.io/The-application-of-Big-Data-for-ecommerce#gref
+</p>
+
+
+
+
