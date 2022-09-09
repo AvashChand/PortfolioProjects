@@ -13,7 +13,7 @@ library(knitr)
 library(RColorBrewer)
 
 #Data sets
-f <- file.choose("Project6Data.csv")
+f <- file.choose("Data Analysis in R -1st.csv")
 sales2020 <- read.csv(f)
 ```
 
