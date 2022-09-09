@@ -2,19 +2,6 @@
 output: html_document
 ---
 ---
-TITLE
----
-
-<p><BR>
-<CENTER>
-<FONT SIZE = 4, COLOR="#8272E9">
-<br>Avash Chand
-<br><b>Northeastern University</b>
-</FONT>
-</CENTER>
-
-
----
 Libraries
 ---
 
